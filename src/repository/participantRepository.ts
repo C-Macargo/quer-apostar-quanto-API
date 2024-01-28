@@ -14,8 +14,18 @@ async function findParticipants() {
     });
   }
 
+  async function findParticipantByName(name: string) {
+    const participant = await prisma.participant.findFirst({
+        where: {
+            name: name, 
+        },
+    });
+    return participant;
+}
+
 
 export const participantRepository = {
     findParticipants,
-    createParticipant
+    createParticipant,
+    findParticipantByName
 }
