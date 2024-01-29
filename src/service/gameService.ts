@@ -13,7 +13,14 @@ async function findGames(){
     return games
 } 
 
+async function findGameById(gameId: string){
+    const id = parseInt(gameId, 10);
+    const game = await gameRepository.findGameById(id);
+    return game
+} 
+
 export const gameService = {
     createGame,
-    findGames
+    findGames,
+    findGameById
 }

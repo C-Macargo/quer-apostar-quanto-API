@@ -24,3 +24,16 @@ export async function findGames(req: Request, res: Response){
 		errorHandler(error, req, res);
 	}
 }
+
+export async function findGameById(req: Request, res: Response){
+    const { gameId } = req.params;
+    console.log(gameId)
+    try {
+		const game = await gameService.findGameById(gameId);
+		return res.status(httpStatus.OK).send(game);
+	} catch (err: unknown) {
+		const error = err as ApplicationError | Error;
+		errorHandler(error, req, res);
+	}
+}
+
