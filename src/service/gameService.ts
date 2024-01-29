@@ -8,6 +8,12 @@ async function createGame(homeTeamName: string, awayTeamName: string) {
     return game
 }
 
+async function findGames(){
+    const games = await gameRepository.findGames();
+    return games
+} 
+
 export const gameService = {
-    createGame
+    createGame,
+    findGames
 }

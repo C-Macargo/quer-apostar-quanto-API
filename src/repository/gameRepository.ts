@@ -9,6 +9,11 @@ async function createGame(homeTeamName:string, awayTeamName:string) {
     });
   }
 
+async function findGames(){
+    return prisma.game.findMany({})
+}
+
   export const gameRepository = {
-    createGame
+    createGame,
+    findGames
 }

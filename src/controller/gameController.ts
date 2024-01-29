@@ -15,3 +15,12 @@ export async function createGame(req: Request, res: Response) {
 	}
 }
 
+export async function findGames(req: Request, res: Response){
+    try {
+		const games = await gameService.findGames();
+		return res.status(httpStatus.OK).send(games);
+	} catch (err: unknown) {
+		const error = err as ApplicationError | Error;
+		errorHandler(error, req, res);
+	}
+}
