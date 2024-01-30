@@ -42,10 +42,26 @@ async function findParticipants() {
   return hasSufficientFunds 
   }
 
+  async function removeBalance(participantId :number, amountBet: number){
+    const participant = findParticipantById(participantId)
+    const newBalance = (await participant).balance - amountBet
+    await prisma.participant.update({
+      where: {
+        id: participantId,
+      },
+      data: {
+        balance: newBalance,
+      },
+    });
+  }
+
+
+
 export const participantRepository = {
     findParticipants,
     createParticipant,
     findParticipantByName,
     findParticipantById,
-    checkParticipantFunds
+    checkParticipantFunds,
+    removeBalance
 }

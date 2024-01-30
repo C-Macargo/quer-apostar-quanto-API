@@ -18,6 +18,7 @@ async function createBet(homeTeamScore:number, awayTeamScore:number, amountBet:n
 	const bet = await betRepository.createBet(
         homeTeamScore, awayTeamScore, amountBet, gameId, participantId
 	);
+    if (bet) await participantRepository.removeBalance(participantId ,amountBet)
     return bet
 }
 
