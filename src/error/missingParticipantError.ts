@@ -1,8 +1,8 @@
-import { ApplicationError } from '@/util/errorProtocol';
+import { ApplicationError } from "@/util/errorProtocol";
 
 export function missingParticipantError(): ApplicationError {
   return {
-    name: 'missingParticipantError',
-    message: 'Participant does not Exist!',
+    name: "missingParticipantError",
+    message: "Participant does not Exist!",
   };
 }

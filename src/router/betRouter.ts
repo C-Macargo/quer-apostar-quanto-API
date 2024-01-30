@@ -1,8 +1,8 @@
 import { createBet } from "@/controller/betController";
 import { Router } from "express";
 
-const betRouter = Router()
+const betRouter = Router();
 
-betRouter.post('/',  createBet)
+betRouter.post("/", createBet);
 
-export default betRouter
+export default betRouter;

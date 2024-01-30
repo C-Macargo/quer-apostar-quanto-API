@@ -1,7 +1,7 @@
 export type BetRequestBody = {
-    homeTeamScore: number; 
-    awayTeamScore: number; 
-    amountBet: number;
-    gameId: number; 
-    participantId: number;
-  };
+  homeTeamScore: number;
+  awayTeamScore: number;
+  amountBet: number;
+  gameId: number;
+  participantId: number;
+};
