@@ -11,11 +11,12 @@ datasource db {
 }
 
 model Participant {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   name      String
   balance   Int
+  Bet       Bet[]
 }
 
 model Game {
@@ -31,16 +32,16 @@ model Game {
 }
 
 model Bet {
-  id               Int      @id @default(autoincrement())
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  homeTeamScore    Int
-  awayTeamScore    Int
-  amountBet        Int
-  gameId           Int
-  participantId    Int
-  status           String   @default("PENDING") 
-  amountWon        Int?
-  game             Game      @relation(fields: [gameId], references: [id])
+  id            Int         @id @default(autoincrement())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  homeTeamScore Int
+  awayTeamScore Int
+  amountBet     Int
+  gameId        Int
+  participantId Int
+  status        String      @default("PENDING")
+  amountWon     Int?
+  game          Game        @relation(fields: [gameId], references: [id])
+  participant   Participant @relation(fields: [participantId], references: [id])
 }
-
