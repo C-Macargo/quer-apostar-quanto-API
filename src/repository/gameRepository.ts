@@ -21,9 +21,22 @@ async function findGameById(id: number) {
     });
 }
 
+async function isGameFinished(gameId:number){
+  const isGameFinished = prisma.game.findFirst({
+    where:{
+      id:gameId
+    },
+    select:{
+      isFinished:true,
+    }
+  })
+  return (await isGameFinished).isFinished
+}
+
 
   export const gameRepository = {
     createGame,
     findGames,
-    findGameById
+    findGameById,
+    isGameFinished
 }

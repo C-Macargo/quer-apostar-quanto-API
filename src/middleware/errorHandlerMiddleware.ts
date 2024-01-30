@@ -9,6 +9,24 @@ export function errorHandler(err: ApplicationError | Error, _req: Request, res: 
     });
   }
 
+  if (err.name === 'insufficientFundsError') {
+    return res.status(httpStatus.FORBIDDEN).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'gameAlreadyFinishedError') {
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: err.message,
+    });
+  }
+
+  if (err.name === 'missingGameError' || 'missingParticipantError') {
+    return res.status(httpStatus.NOT_FOUND).send({
+      message: err.message,
+    });
+  }
+
   console.error(err);
   res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
     error: 'InternalServerError',
