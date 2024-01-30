@@ -27,7 +27,6 @@ export async function findGames(req: Request, res: Response){
 
 export async function findGameById(req: Request, res: Response){
     const { gameId } = req.params;
-    console.log(gameId)
     try {
 		const game = await gameService.findGameById(gameId);
 		return res.status(httpStatus.OK).send(game);
