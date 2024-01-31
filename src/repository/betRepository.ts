@@ -118,6 +118,14 @@ async function finishWinningBets(
       where: { id: bet.id },
       data: { amountWon: winnings, status: "WON" },
     });
+
+    const participant = await participantRepository.findParticipantById(
+      bet.participantId,
+    );
+    await prisma.participant.update({
+      where: { id: participant.id },
+      data: { balance: participant.balance + winnings + bet.amountBet },
+    });
   }
 }
 
