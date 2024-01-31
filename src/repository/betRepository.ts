@@ -104,7 +104,7 @@ async function finishWinningBets(
     awayTeamScore,
   );
   const totalWinningBetAmount = winningBets.reduce(
-    (sum, bet) => sum + bet.amountBet,
+    (sum: number, { amountBet }: { amountBet: number }) => sum + amountBet,
     0,
   );
   if (totalWinningBetAmount === 0) {

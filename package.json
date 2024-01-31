@@ -4,11 +4,12 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "build": "ttsc",
-    "start": "node dist/server.js",
+    "build": "npm install && ttsc",
+    "start": "npm run prisma:migrate:deploy && node dist/src/server.js",
     "dev": "tsx watch src/server.ts",
     "lint": "eslint 'tests/**/*.{ts,tsx}' 'src/**/*.{ts,tsx}' --fix",
-    "test": "dotenv -e .env.test prisma migrate deploy && dotenv -e .env.test jest"
+    "test": "dotenv -e .env.test prisma migrate deploy && dotenv -e .env.test jest",
+    "prisma:migrate:deploy": "prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
@@ -43,6 +44,9 @@
     "dotenv-cli": "^7.3.0",
     "express": "^4.18.2",
     "http-status": "^1.6.2",
-    "joi": "^17.12.0"
+    "joi": "^17.12.0",
+    "prisma": "^5.9.0",
+    "ttypescript": "^1.5.13",
+    "typescript": "^4.2.4"
   }
 }
