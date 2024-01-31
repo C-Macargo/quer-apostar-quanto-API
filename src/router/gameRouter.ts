@@ -13,6 +13,6 @@ const gameRouter = Router();
 gameRouter.post("/", validateSchema(gameSchema), createGame);
 gameRouter.get("/", findGames);
 gameRouter.get("/:gameId", findGameById);
-gameRouter.post("/:gameId", finishGame);
+gameRouter.post("/:gameId/finish", finishGame);
 
 export default gameRouter;
