@@ -13,6 +13,22 @@ async function createBet(
   gameId: number,
   participantId: number,
 ) {
+  await isBetValid(amountBet, gameId, participantId);
+  const bet = await betRepository.createBetAndRemoveBalanceTransaction(
+    homeTeamScore,
+    awayTeamScore,
+    amountBet,
+    gameId,
+    participantId,
+  );
+  return bet;
+}
+
+async function isBetValid(
+  amountBet: number,
+  gameId: number,
+  participantId: number,
+) {
   const participantExists =
     await participantRepository.findParticipantById(participantId);
   if (!participantExists) throw missingParticipantError();
@@ -25,15 +41,6 @@ async function createBet(
   if (participantHasFunds == false) throw insufficientFundsError();
   const isGameFinished = await gameRepository.isGameFinished(gameId);
   if (isGameFinished == true) throw gameAlreadyFinishedError();
-  const bet = await betRepository.createBet(
-    homeTeamScore,
-    awayTeamScore,
-    amountBet,
-    gameId,
-    participantId,
-  );
-  if (bet) await participantRepository.removeBalance(participantId, amountBet);
-  return bet;
 }
 
 export const betService = {
