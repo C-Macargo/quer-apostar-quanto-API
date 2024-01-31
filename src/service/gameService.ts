@@ -1,4 +1,5 @@
 import { gameAlreadyFinishedError } from "@/error/gameAlreadyFinishedError";
+import { missingGameError } from "@/error/missingGameError";
 import { gameRepository } from "@/repository/gameRepository";
 
 async function createGame(homeTeamName: string, awayTeamName: string) {
@@ -14,6 +15,7 @@ async function findGames() {
 async function findGameById(gameId: string) {
   const gamneIdNumber = parseInt(gameId, 10);
   const game = await gameRepository.findGameById(gamneIdNumber);
+  if (!game) throw missingGameError();
   return game;
 }
 
