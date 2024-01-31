@@ -19,8 +19,8 @@ const api = supertest(app);
 describe("POST /bets", () => {
   it("should return the created bet and respond with status 201", async () => {
     const game = await createGame();
-    const randomNumber = faker.number.int({ min: 1, max: 5 });
     const participant = await createParticipant();
+    const randomNumber = faker.number.int({ min: 1, max: 5 });
     const betBody = {
       homeTeamScore: randomNumber,
       awayTeamScore: randomNumber,
@@ -28,9 +28,6 @@ describe("POST /bets", () => {
       gameId: game.id,
       participantId: participant.id,
     };
-    console.log(game);
-    console.log(participant);
-    console.log(betBody);
     const response = await api.post("/bets/").send(betBody);
     expect(response.status).toBe(httpStatus.CREATED);
     expect(response.body).toMatchObject({

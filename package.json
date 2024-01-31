@@ -8,7 +8,8 @@
     "start": "npm run prisma:migrate:deploy && node dist/src/server.js",
     "dev": "tsx watch src/server.ts",
     "lint": "eslint 'tests/**/*.{ts,tsx}' 'src/**/*.{ts,tsx}' --fix",
-    "test": "dotenv -e .env.test prisma migrate deploy && dotenv -e .env.test jest",
+    "test": "dotenv -e .env.test prisma migrate deploy && dotenv -e .env.test jest --runInBand",
+    "test:report": "dotenv -e .env.test prisma migrate deploy & dotenv -e .env.test jest -- --coverage --runInBand --coverageReporters=json-summary --coverageDirectory=coverage --collectCoverageFrom='**/*.ts'",
     "prisma:migrate:deploy": "prisma migrate deploy"
   },
   "keywords": [],
