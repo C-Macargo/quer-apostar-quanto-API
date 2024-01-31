@@ -5,8 +5,8 @@ import betRouter from "./betRouter";
 
 const appRouter = Router();
 
-appRouter.use("/participant", participantRouter);
+appRouter.use("/participants", participantRouter);
 appRouter.use("/games", gameRouter);
-appRouter.use("/bet", betRouter);
+appRouter.use("/bets", betRouter);
 
 export default appRouter;

@@ -18,7 +18,7 @@ const api = supertest(app);
 describe("GET /participants", () => {
   it("should return all participants and respond with status 200", async () => {
     const participant = await createParticipant();
-    const response = await api.get("/participant/");
+    const response = await api.get("/participants/");
     expect(response.status).toBe(httpStatus.OK);
     expect(Array.isArray(response.body)).toBeTruthy();
 
@@ -33,7 +33,7 @@ describe("GET /participants", () => {
     );
   });
   it("should return 200 even if table is empty", async () => {
-    const response = await api.get("/participant/");
+    const response = await api.get("/participants/");
     expect(response.status).toBe(httpStatus.OK);
   });
 });
@@ -44,7 +44,7 @@ describe("post /participants", () => {
       name: faker.person.firstName(),
       balance: faker.number.int({ min: 1, max: 999 }),
     };
-    const response = await api.post("/participant/").send(participant);
+    const response = await api.post("/participants/").send(participant);
     expect(response.status).toBe(httpStatus.BAD_REQUEST);
   });
 
@@ -54,7 +54,7 @@ describe("post /participants", () => {
       name: participant.name,
       balance: participant.balance,
     };
-    const response = await api.post("/participant/").send(newParticipant);
+    const response = await api.post("/participants/").send(newParticipant);
     expect(response.status).toBe(httpStatus.CONFLICT);
   });
 
@@ -63,7 +63,7 @@ describe("post /participants", () => {
       name: faker.person.firstName(),
       balance: faker.number.int({ min: 1000, max: 10000 }),
     };
-    const response = await api.post("/participant/").send(participant);
+    const response = await api.post("/participants/").send(participant);
     expect(response.status).toBe(httpStatus.CREATED);
     expect(response.body).toMatchObject({
       name: participant.name,
