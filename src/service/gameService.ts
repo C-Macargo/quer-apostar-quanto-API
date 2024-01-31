@@ -1,3 +1,4 @@
+import { gameAlreadyFinishedError } from "@/error/gameAlreadyFinishedError";
 import { gameRepository } from "@/repository/gameRepository";
 
 async function createGame(homeTeamName: string, awayTeamName: string) {
@@ -11,8 +12,24 @@ async function findGames() {
 }
 
 async function findGameById(gameId: string) {
-  const id = parseInt(gameId, 10);
-  const game = await gameRepository.findGameById(id);
+  const gamneIdNumber = parseInt(gameId, 10);
+  const game = await gameRepository.findGameById(gamneIdNumber);
+  return game;
+}
+
+async function finishGame(
+  gameId: string,
+  homeTeamScore: number,
+  awayTeamScore: number,
+) {
+  const gamneIdNumber = parseInt(gameId, 10);
+  const isGameFinished = await gameRepository.isGameFinished(gamneIdNumber);
+  if (isGameFinished == true) throw gameAlreadyFinishedError();
+  const game = await gameRepository.finishGameTransaction(
+    gamneIdNumber,
+    homeTeamScore,
+    awayTeamScore,
+  );
   return game;
 }
 
@@ -20,4 +37,5 @@ export const gameService = {
   createGame,
   findGames,
   findGameById,
+  finishGame,
 };

@@ -38,3 +38,22 @@ export async function findGameById(req: Request, res: Response) {
     errorHandler(error, req, res);
   }
 }
+
+export async function finishGame(req: Request, res: Response) {
+  const { gameId } = req.params;
+  const { homeTeamScore, awayTeamScore } = req.body as {
+    homeTeamScore: number;
+    awayTeamScore: number;
+  };
+  try {
+    const game = await gameService.finishGame(
+      gameId,
+      homeTeamScore,
+      awayTeamScore,
+    );
+    return res.status(httpStatus.OK).send(game);
+  } catch (err: unknown) {
+    const error = err as ApplicationError | Error;
+    errorHandler(error, req, res);
+  }
+}
