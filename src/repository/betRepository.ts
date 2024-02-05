@@ -1,6 +1,6 @@
 import prisma from "@/config/database";
 import { participantRepository } from "./participantRepository";
-import { Bet } from "@/util/types";
+import { Bet } from "@/types/types";
 
 async function createBet(
   homeTeamScore: number,

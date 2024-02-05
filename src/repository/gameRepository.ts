@@ -1,6 +1,6 @@
 import prisma from "@/config/database";
 import { betRepository } from "./betRepository";
-import { Game } from "@/util/types";
+import { Game } from "@/types/types";
 
 async function createGame(homeTeamName: string, awayTeamName: string) {
   return prisma.game.create({

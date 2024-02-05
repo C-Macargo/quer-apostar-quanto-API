@@ -1,4 +1,4 @@
-import { ApplicationError } from "@/util/errorProtocol";
+import { ApplicationError } from "@/types/errorProtocol";
 
 export function duplicateUserError(): ApplicationError {
   return {

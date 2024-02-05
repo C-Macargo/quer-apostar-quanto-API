@@ -1,7 +1,7 @@
 import { errorHandler } from "@/middleware/errorHandlerMiddleware";
 import { betService } from "@/service/betService";
-import { ApplicationError } from "@/util/errorProtocol";
-import { BetRequestBody } from "@/util/types";
+import { ApplicationError } from "@/types/errorProtocol";
+import { BetRequestBody } from "@/types/types";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 

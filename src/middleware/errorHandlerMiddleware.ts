@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
 import { Request, Response } from "express";
-import { ApplicationError } from "@/util/errorProtocol";
+import { ApplicationError } from "@/types/errorProtocol";
 
 export function errorHandler(
   err: ApplicationError | Error,

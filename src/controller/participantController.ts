@@ -1,6 +1,6 @@
 import { errorHandler } from "@/middleware/errorHandlerMiddleware";
 import { participantService } from "@/service/participantService";
-import { ApplicationError } from "@/util/errorProtocol";
+import { ApplicationError } from "@/types/errorProtocol";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
