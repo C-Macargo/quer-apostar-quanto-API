@@ -14,7 +14,7 @@ async function findGames() {
 
 async function findGameById(gameId: string) {
   const gamneIdNumber = parseInt(gameId, 10);
-  const game = await gameRepository.findGameById(gamneIdNumber);
+  const game = await gameRepository.findGamesByIdWithBets(gamneIdNumber);
   if (!game) throw missingGameError();
   return game;
 }

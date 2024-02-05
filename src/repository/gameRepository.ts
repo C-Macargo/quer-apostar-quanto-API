@@ -23,8 +23,19 @@ async function findGameById(id: number) {
   });
 }
 
+async function findGamesByIdWithBets(id: number) {
+  return prisma.game.findFirst({
+    where: {
+      id: id,
+    },
+    include: {
+      Bet: true,
+    },
+  });
+}
+
 async function isGameFinished(gameId: number) {
-  const isGameFinished = prisma.game.findFirst({
+  const isGameFinished = await prisma.game.findFirst({
     where: {
       id: gameId,
     },
@@ -32,7 +43,7 @@ async function isGameFinished(gameId: number) {
       isFinished: true,
     },
   });
-  return (await isGameFinished).isFinished;
+  return isGameFinished.isFinished;
 }
 
 async function updateGameScore(
@@ -90,4 +101,5 @@ export const gameRepository = {
   isGameFinished,
   updateGameScore,
   finishGameTransaction,
+  findGamesByIdWithBets,
 };
