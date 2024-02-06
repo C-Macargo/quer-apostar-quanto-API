@@ -38,4 +38,34 @@ describe("POST /bets", () => {
       amountBet: betBody.amountBet,
     });
   });
+
+  it("should return a 404 status code if the game does not exist", async () => {
+    const gameId = faker.number.int({ min: 1, max: 5 });
+    const participant = await createParticipant();
+    const randomNumber = faker.number.int({ min: 1, max: 5 });
+    const betBody = {
+      homeTeamScore: randomNumber,
+      awayTeamScore: randomNumber,
+      amountBet: participant.balance,
+      gameId: gameId,
+      participantId: participant.id,
+    };
+    const response = await api.post("/bets/").send(betBody);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+  });
+
+  it("should return a 404 status code if the participant does not exist", async () => {
+    const game = await createGame();
+    const participantId = faker.number.int({ min: 1, max: 5 });
+    const randomNumber = faker.number.int({ min: 1, max: 5 });
+    const betBody = {
+      homeTeamScore: randomNumber,
+      awayTeamScore: randomNumber,
+      amountBet: 1000,
+      gameId: game.id,
+      participantId: participantId,
+    };
+    const response = await api.post("/bets/").send(betBody);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
+  });
 });
