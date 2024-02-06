@@ -24,7 +24,7 @@ async function findGameById(id: number) {
 }
 
 async function findGamesByIdWithBets(id: number) {
-  return prisma.game.findFirst({
+  const game = await prisma.game.findFirst({
     where: {
       id: id,
     },
@@ -32,6 +32,16 @@ async function findGamesByIdWithBets(id: number) {
       Bet: true,
     },
   });
+
+  if (game && game.Bet) {
+    const { Bet, ...GameInfo } = game;
+    const result = {
+      ...GameInfo,
+      bets: Bet,
+    };
+    return result;
+  }
+  return game;
 }
 
 async function isGameFinished(gameId: number) {
