@@ -1,9 +1,35 @@
-# quer-apostar-quanto-API
 
-## Description
+## Quer apostar quanto API
 
 Quer Apostar Quanto is an API designed for making bets on sportive games, intended as a study Proof of Concept (POC) project. This project allows participants to bet on the outcomes of games and be rewarded based on the accuracy of their guess on the game score. Aimed at providing a fun and interactive way to engage with sports games.
 
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/C-Macargo/quer-apostar-quanto-API
+```
+
+Go to the project directory
+
+```bash
+  cd my-project
+```
+
+Install dependencies and build
+
+```bash
+  npm run build
+```
+
+Start the server
+
+```bash
+  npm run start
+```
 
 
 ## API Reference
