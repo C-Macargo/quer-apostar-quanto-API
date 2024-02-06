@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { stripHtml } from "string-strip-html";
 
 export function StripHtml() {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const { stripHtml } = await import("string-strip-html");
+
     function cleanObject(obj: Record<string, unknown>) {
       for (const [key, value] of Object.entries(obj)) {
         if (typeof value === "string") {
