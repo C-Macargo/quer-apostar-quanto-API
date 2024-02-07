@@ -2,11 +2,22 @@ import prisma from "@/config/database";
 import { faker } from "@faker-js/faker";
 
 export async function createGame() {
-  const participant = await prisma.game.create({
+  const game = await prisma.game.create({
     data: {
       homeTeamName: faker.person.jobTitle(),
       awayTeamName: faker.person.zodiacSign(),
     },
   });
-  return participant;
+  return game;
+}
+
+export async function createFinishedGame() {
+  const game = await prisma.game.create({
+    data: {
+      homeTeamName: faker.person.jobTitle(),
+      awayTeamName: faker.person.zodiacSign(),
+      isFinished: true,
+    },
+  });
+  return game;
 }

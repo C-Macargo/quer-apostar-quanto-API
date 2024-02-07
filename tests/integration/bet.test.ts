@@ -3,7 +3,7 @@ import supertest from "supertest";
 import { cleanDb } from "../helper";
 import httpStatus from "http-status";
 import { faker } from "@faker-js/faker";
-import { createGame } from "../factories/gameFactories";
+import { createFinishedGame, createGame } from "../factories/gameFactories";
 import { createParticipant } from "../factories/participantFactories";
 
 beforeAll(async () => {
@@ -51,7 +51,7 @@ describe("POST /bets", () => {
       participantId: participant.id,
     };
     const response = await api.post("/bets/").send(betBody);
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
     const expectedErrorMessage = "Game does not exist!";
     expect(response.body.message).toBe(expectedErrorMessage);
   });
@@ -68,8 +68,44 @@ describe("POST /bets", () => {
       participantId: participantId,
     };
     const response = await api.post("/bets/").send(betBody);
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(httpStatus.NOT_FOUND);
     const expectedErrorMessage = "Participant does not exist!";
+    expect(response.body.message).toBe(expectedErrorMessage);
+  });
+
+  it("should return a 403 status code if the participant does not have funds", async () => {
+    const game = await createGame();
+    const participant = await createParticipant();
+    const randomNumber = faker.number.int({ min: 1, max: 5 });
+    const betBody = {
+      homeTeamScore: randomNumber,
+      awayTeamScore: randomNumber,
+      amountBet:
+        participant.balance + faker.number.int({ min: 100, max: 1000 }),
+      gameId: game.id,
+      participantId: participant.id,
+    };
+    const response = await api.post("/bets/").send(betBody);
+    expect(response.status).toBe(httpStatus.FORBIDDEN);
+    const expectedErrorMessage =
+      "Participant does not have enough funds to bet!";
+    expect(response.body.message).toBe(expectedErrorMessage);
+  });
+
+  it("should return a 403 status code if the game is already finished", async () => {
+    const game = await createFinishedGame();
+    const participant = await createParticipant();
+    const randomNumber = faker.number.int({ min: 1, max: 5 });
+    const betBody = {
+      homeTeamScore: randomNumber,
+      awayTeamScore: randomNumber,
+      amountBet: participant.balance,
+      gameId: game.id,
+      participantId: participant.id,
+    };
+    const response = await api.post("/bets/").send(betBody);
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    const expectedErrorMessage = "The game has already finished!";
     expect(response.body.message).toBe(expectedErrorMessage);
   });
 });
