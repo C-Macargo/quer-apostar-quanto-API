@@ -51,7 +51,9 @@ describe("POST /bets", () => {
       participantId: participant.id,
     };
     const response = await api.post("/bets/").send(betBody);
-    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.status).toBe(404);
+    const expectedErrorMessage = "Game does not exist!";
+    expect(response.body.message).toBe(expectedErrorMessage);
   });
 
   it("should return a 404 status code if the participant does not exist", async () => {
@@ -66,6 +68,8 @@ describe("POST /bets", () => {
       participantId: participantId,
     };
     const response = await api.post("/bets/").send(betBody);
-    expect(response.status).toBe(httpStatus.NOT_FOUND);
+    expect(response.status).toBe(404);
+    const expectedErrorMessage = "Participant does not exist!";
+    expect(response.body.message).toBe(expectedErrorMessage);
   });
 });
