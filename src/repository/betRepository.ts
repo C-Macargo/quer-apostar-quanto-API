@@ -1,42 +1,30 @@
 import prisma from "@/config/database";
 import { participantRepository } from "./participantRepository";
 import { Bet } from "@/types/types";
+import { CreateBetParams } from "@/interface/betInterface";
 
-async function createBet(
-  homeTeamScore: number,
-  awayTeamScore: number,
-  amountBet: number,
-  gameId: number,
-  participantId: number,
-) {
+async function createBet(betParams: CreateBetParams) {
   return prisma.bet.create({
     data: {
-      homeTeamScore: homeTeamScore,
-      awayTeamScore: awayTeamScore,
-      amountBet: amountBet,
-      gameId: gameId,
-      participantId: participantId,
+      homeTeamScore: betParams.homeTeamScore,
+      awayTeamScore: betParams.awayTeamScore,
+      amountBet: betParams.amountBet,
+      gameId: betParams.gameId,
+      participantId: betParams.participantId,
     },
   });
 }
 
 async function createBetAndRemoveBalanceTransaction(
-  homeTeamScore: number,
-  awayTeamScore: number,
-  amountBet: number,
-  gameId: number,
-  participantId: number,
+  betParams: CreateBetParams,
 ): Promise<Bet> {
   try {
     return await prisma.$transaction(async () => {
-      const bet = await createBet(
-        homeTeamScore,
-        awayTeamScore,
-        amountBet,
-        gameId,
-        participantId,
+      const bet = await createBet(betParams);
+      await participantRepository.removeBalance(
+        betParams.participantId,
+        betParams.amountBet,
       );
-      await participantRepository.removeBalance(participantId, amountBet);
       return bet;
     });
   } catch (error) {
@@ -64,6 +52,7 @@ async function finishLosingBets(
     },
   });
 }
+
 async function totalBetValue(gameIdNumber: number): Promise<number> {
   const {
     _sum: { amountBet },
@@ -92,41 +81,27 @@ async function findWinningBets(
   return winningBets;
 }
 
-async function finishWinningBets(
-  gameIdNumber: number,
-  homeTeamScore: number,
-  awayTeamScore: number,
+async function updateBetStatusAndWinnings(
+  bet: { id: number; participantId: number; amountBet: number },
+  winnings: number,
 ): Promise<void> {
-  const totalBetAmount = await totalBetValue(gameIdNumber);
-  const winningBets = await findWinningBets(
-    gameIdNumber,
-    homeTeamScore,
-    awayTeamScore,
-  );
-  const totalWinningBetAmount = winningBets.reduce(
-    (sum: number, { amountBet }: { amountBet: number }) => sum + amountBet,
-    0,
-  );
-  if (totalWinningBetAmount === 0) {
-    return;
-  }
-  for (const bet of winningBets) {
-    const winnings =
-      (bet.amountBet / totalWinningBetAmount) * totalBetAmount * 0.7;
+  await prisma.bet.update({
+    where: { id: bet.id },
+    data: { amountWon: winnings, status: "WON" },
+  });
+}
 
-    await prisma.bet.update({
-      where: { id: bet.id },
-      data: { amountWon: winnings, status: "WON" },
-    });
-
-    const participant = await participantRepository.findParticipantById(
-      bet.participantId,
-    );
-    await prisma.participant.update({
-      where: { id: participant.id },
-      data: { balance: participant.balance + winnings + bet.amountBet },
-    });
-  }
+async function updateParticipantBalance(
+  participantId: number,
+  winnings: number,
+  originalBet: number,
+): Promise<void> {
+  const participant =
+    await participantRepository.findParticipantById(participantId);
+  await prisma.participant.update({
+    where: { id: participant.id },
+    data: { balance: participant.balance + winnings + originalBet },
+  });
 }
 
 export const betRepository = {
@@ -134,5 +109,7 @@ export const betRepository = {
   createBetAndRemoveBalanceTransaction,
   totalBetValue,
   finishLosingBets,
-  finishWinningBets,
+  findWinningBets,
+  updateParticipantBalance,
+  updateBetStatusAndWinnings,
 };

@@ -1,6 +1,7 @@
 import prisma from "@/config/database";
 import { betRepository } from "./betRepository";
 import { Game } from "@/types/types";
+import { betService } from "@/service/betService";
 
 async function createGame(homeTeamName: string, awayTeamName: string) {
   return prisma.game.create({
@@ -87,7 +88,7 @@ async function finishGameTransaction(
         homeTeamScore,
         awayTeamScore,
       );
-      await betRepository.finishWinningBets(
+      await betService.finishWinningBets(
         gameIdNumber,
         homeTeamScore,
         awayTeamScore,
