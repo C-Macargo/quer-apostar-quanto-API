@@ -3,6 +3,6 @@ export function calculateWinnings(
   totalWinningBetAmount: number,
   totalBetAmount: number,
 ): number {
-  const houseTax = 1 - 0.3;
-  return (amountBet / totalWinningBetAmount) * totalBetAmount * houseTax;
+  const houseTaxRate = 0.7;
+  return (amountBet / totalWinningBetAmount) * totalBetAmount * houseTaxRate;
 }
