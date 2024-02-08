@@ -81,3 +81,25 @@ describe("POST /games", () => {
     });
   });
 });
+
+describe("POST /games/:id/finish", () => {
+  it("should return the created game and respond with status 200", async () => {
+    const game = await createGame();
+    const finishGameBody = {
+      awayTeamScore: faker.number.int({ min: 1, max: 10 }),
+      homeTeamScore: faker.number.int({ min: 1, max: 10 }),
+    };
+    const response = await api
+      .post(`/games/${game.id}/finish`)
+      .send(finishGameBody);
+    expect(response.status).toBe(httpStatus.OK);
+    expect(response.body).toMatchObject({
+      id: game.id,
+      homeTeamName: game.homeTeamName,
+      awayTeamName: game.awayTeamName,
+      awayTeamScore: expect.any(Number),
+      homeTeamScore: expect.any(Number),
+      isFinished: true,
+    });
+  });
+});
