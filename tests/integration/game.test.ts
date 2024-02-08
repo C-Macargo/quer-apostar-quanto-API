@@ -3,7 +3,7 @@ import supertest from "supertest";
 import { cleanDb } from "../helper";
 import httpStatus from "http-status";
 import { faker } from "@faker-js/faker";
-import { createGame } from "../factories/gameFactories";
+import { createFinishedGame, createGame } from "../factories/gameFactories";
 
 beforeAll(async () => {
   await init();
@@ -101,5 +101,18 @@ describe("POST /games/:id/finish", () => {
       homeTeamScore: expect.any(Number),
       isFinished: true,
     });
+  });
+  it("should return status code 400 if the game is already finished", async () => {
+    const game = await createFinishedGame();
+    const finishGameBody = {
+      awayTeamScore: faker.number.int({ min: 1, max: 10 }),
+      homeTeamScore: faker.number.int({ min: 1, max: 10 }),
+    };
+    const response = await api
+      .post(`/games/${game.id}/finish`)
+      .send(finishGameBody);
+    expect(response.status).toBe(httpStatus.BAD_REQUEST);
+    const expectedErrorMessage = "The game has already finished!";
+    expect(response.body.message).toBe(expectedErrorMessage);
   });
 });
